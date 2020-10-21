@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>Problem01.List</AssemblyName>
+    <RootNamespace>Problem01.List</RootNamespace>
   </PropertyGroup>
 
 </Project>

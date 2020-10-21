@@ -10,23 +10,29 @@
         private T[] _items;
 
         public List()
-            : this(DEFAULT_CAPACITY) {
+            : this(DEFAULT_CAPACITY)
+        {
         }
 
         public List(int capacity)
         {
-            throw new NotImplementedException();
+            this.ValidateCapacity(capacity);
+            this._items = new T[capacity];
         }
 
         public T this[int index]
         {
             get
             {
-                throw new NotImplementedException();
+                this.ValidateIndex(index);
+
+                return this._items[index];
             }
             set
             {
-                throw new NotImplementedException();
+                this.ValidateIndex(index);
+
+                this._items[index] = value;
             }
         }
 
@@ -34,41 +40,123 @@
 
         public void Add(T item)
         {
-            throw new NotImplementedException();
+            if (this._items.Length == this.Count)
+            {
+                this.Resize();
+            }
+
+            this._items[this.Count] = item;
+            this.Count++;
         }
 
         public bool Contains(T item)
         {
-            throw new NotImplementedException();
-        }
+            for (int i = 0; i < this.Count; i++)
+            {
+                if (this._items[i].Equals(item))
+                {
+                    return true;
+                }
+            }
 
+            return false;
+        }
 
         public int IndexOf(T item)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < this.Count; i++)
+            {
+                if (this._items[i].Equals(item))
+                {
+                    return i;
+                }
+            }
+
+            return -1;
         }
 
         public void Insert(int index, T item)
         {
-            throw new NotImplementedException();
+            this.ValidateIndex(index);
+
+            if (this._items.Length == this.Count)
+            {
+                this.Resize();
+            }
+
+            for (int i = this.Count; i > index; i--)
+            {
+                this._items[i] = this._items[i - 1];
+            }
+
+            this._items[index] = item;
+            this.Count++;
         }
 
         public bool Remove(T item)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < this.Count; i++)
+            {
+                if (this._items[i].Equals(item))
+                {
+                    this.RemoveAt(i);
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public void RemoveAt(int index)
         {
-            throw new NotImplementedException();
+            this.ValidateIndex(index);
+
+            for (int i = index; i < this.Count - 1; i++)
+            {
+                this._items[i] = this._items[i + 1];
+            }
+
+            this._items[this.Count - 1] = default;
+            this.Count--;
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < this.Count; i++)
+            {
+                yield return this._items[i];
+            }
         }
 
-        IEnumerator IEnumerable.GetEnumerator() 
+        IEnumerator IEnumerable.GetEnumerator()
             => throw new NotImplementedException();
+
+        private void ValidateCapacity(int capacity)
+        {
+            if (capacity < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(capacity));
+            }
+        }
+
+        private void ValidateIndex(int index)
+        {
+            if (index < 0 || index >= this.Count)
+            {
+                throw new IndexOutOfRangeException(nameof(index));
+            }
+        }
+
+        private void Resize()
+        {
+            var newArray = new T[this._items.Length * 2];
+
+            for (int i = 0; i < this._items.Length; i++)
+            {
+                newArray[i] = this._items[i];
+            }
+
+            this._items = newArray;
+        }
     }
 }
